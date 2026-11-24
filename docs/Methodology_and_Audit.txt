@@ -1,0 +1,31 @@
+ARCHIVED ANALYSIS NOTES — for current run command and folder layout see ../README.md.
+
+CE766 MULA–MUTHA FINAL ANALYSIS PACKAGE
+
+This supersedes the earlier interim screening. Final_Submission_Answers.txt contains text for the six Moodle sections. Upload Figure_1_hydrology.png and Figure_2_management.png individually. Only these two results visuals should be uploaded.
+
+REPRODUCIBILITY
+Python analysis.py was run on the supplied raw data. Command: python analysis.py /path/to/raw_inputs
+The script writes CSV results and two PNG figures alongside itself. Requires Python 3, h5py, numpy, pandas, shapely, pyproj, scipy, matplotlib and Poppler's pdftotext on PATH. Original filenames are retained in raw_inputs. Regional groundwater numbers are transcribed from the 2024 report (PDF p.102, printed p.83). Raw groundwater source provenance is retained in the processed tables. Some large reference files are not duplicated in this ZIP; see source manifest.
+
+AUDIT / IMPORTANT LIMITATIONS
+- Watershed area calculated from supplied polygon in EPSG:32643 = 2037.9696 km². LULC export mapped area 2038.5194 km²; scaled class areas to polygon area. Boundary delineation procedure and outlet coordinates not supplied. GeoJSON contains 37 river lines; verify outlet and original source with student before claiming a specific delineation method.
+- NetCDF contains 3653 daily observations, 10 nonzero intersecting rainfall cells, and no missing observations in intersecting cells. Latitude coordinate values agree with missing-cell pattern; geotransform metadata suggests opposite row order, so coordinate arrays were used. Area weighting is explicit in rain_grid_weights.csv. Mean P = 1594.42 mm/year.
+- Two post-monsoon CSVs were duplicates; one used. Pre-monsoon PDF filtered to Pune and polygon; 430 Pune rows parsed with zero rejected rows. 2014 excluded to match project period. Post-monsoon 2024 not found in quarterly file. 40 exact coordinate/year pairs; pre 54 and post 58 records. Two flagged records retained (Bukum May 2016 = 11 m, Mulshi May 2019 = 0.01 m); excluding both leaves median paired rise 1.825 m. Trend tests use Kendall tau with years and Theil–Sen slopes, min 6 observations; no p < .05. No interpolation or causal regression claimed.
+- HSG x LULC export covers 2015.77 km² in each period. C/D proportions by class are scaled to full mapped class areas and polygon area. TR-55 CN assignments: trees good woods C70 D77; grass good pasture C74 D80; flooded vegetation C/D95 (assumed); crops good straight row C85 D89; shrub fair brush C70 D77; built residential 65% impervious proxy C90 D92; bare soil fallow C91 D94. Water and trace snow excluded from direct land runoff. HRU shares assumed spatially uniform among IMD cells. Daily event reset and no calibration; CN ±5 sensitivity. This models runoff generation, NOT streamflow at outlet.
+- ET coverage 87.28%; mean valid-area ET extrapolated to catchment, sensitivity with missing-area ET 0.5x and 1.5x. Residual P-ET-Qd is unallocated; not storage or recharge. Do not sum RIF recharge into that diagnostic as an additional loss.
+- Annual rain-only recharge model adapts GEC norms: monsoon threshold 10% of 10-year annual mean (159.44 mm) rather than true long-term normal; non-monsoon mean 200.51 mm exceeds threshold, so included. RIF 2%, 7%, 13% are representative basalt formation alternatives, not known area fractions. Urban adjustment 30% of RIF on built class (urban proxy); excludes mapped water; other land assumed recharge-worthy. 10% allowance for natural discharge. No other recharge sources included. Recharge and runoff models are separate screening estimates, not one calibrated mass-conserving process model.
+- Demand cases 35.23, 54.19, 64.33 mm/year from official 2024 assessment unit extraction/area for Mulshi, Pune City, Haveli; applied uniformly to catchment as hypothetical rates. Not measured extraction or spatial allocation. Actual assessment unit stage of extraction differs from the model ratio. Scenario runs compare five management alternatives under 90 equal-weight uncertainty combinations; frequencies are not probabilities and interventions are targets rather than engineered structures. No cost optimization.
+- CWC station dataset checked; none inside polygon, nearest station Phulgaon approx 10.19 km from boundary. Downstream flow not used without matching drainage area. No claim of actual outlet water balance closure. Source reports 2017 and 2023 retained by user for context but not used for final demand proxy; 2024 is the reference assessment.
+
+FILES
+annual_results.csv: annual rainfall, ET, runoff sensitivity, recharge, unallocated residual, yearly median rise.
+daily_rainfall_runoff.csv: 3653 days with rainfall and six runoff series.
+soil_landcover_CN.csv: class/soil cross-tab, normalized areas and CN mapping.
+pre_monsoon_catchment.csv / post_monsoon_catchment.csv / seasonal_pairs.csv / well_trends.csv: groundwater analysis.
+recharge.csv / scenarios.csv / scenario_summary.csv: annual estimates and 450 management runs.
+regional_benchmarks.csv / nearest_discharge_stations.csv / rain_grid_weights.csv: input audit.
+run_log.txt: actual output of the analysis run.
+Final_Submission_Answers.txt and two PNGs: final deliverables.
+
+BEFORE SUBMISSION: confirm exact provenance of supplied watershed, upload the organized package and provide authorized source-data access, verify professor access, replace the repository placeholder in section 6, review equations and calculations for quiz. Do not describe the screening as a validated groundwater balance. No new dataset is essential for this limited-scope submission, but the gaps above matter for real-world applications.
